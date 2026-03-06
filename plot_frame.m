@@ -1,9 +1,8 @@
-function [outputArg1,outputArg2, outputArg3] = plot_frame(position,rotation,scale)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+function [outputArg1,outputArg2, outputArg3] = plot_frame(position,rotationq,scale)
+% plots a small frame given position and rotation in quaternion
 arguments (Input)
     position
-    rotation
+    rotationq quaternion
     scale
 end
 
@@ -12,6 +11,8 @@ arguments (Output)
     outputArg2
     outputArg3
 end
+
+rotation = rotationq.rotmat('frame');
 
 plot3(position(1),position(2),position(3))
 hold on;
