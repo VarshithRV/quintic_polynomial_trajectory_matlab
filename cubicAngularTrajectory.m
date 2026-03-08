@@ -1,4 +1,4 @@
-function [Q,Theta,axis,delta_t,theta_coeffs] = cubicAngularTrajectory(initialOrientation,initialAngularVelocity,finalOrientation,finalAngularVelocity,duration)
+function [Q,Theta,axis,delta_t,theta_coeffs] = cubicAngularTrajectory(initialOrientation,initialAngularVelocity,finalOrientation,finalAngularVelocity,duration,dt)
     % function to create a trajectory of frame rotation
     
     % INTPUTS : 
@@ -21,6 +21,7 @@ function [Q,Theta,axis,delta_t,theta_coeffs] = cubicAngularTrajectory(initialOri
         finalOrientation (1,1) quaternion
         finalAngularVelocity (1,1)
         duration (1,1)
+        dt (1,1) double = 0.1
     end
 
     arguments (Output)
@@ -49,15 +50,20 @@ function [Q,Theta,axis,delta_t,theta_coeffs] = cubicAngularTrajectory(initialOri
     ];
 
     theta_coeffs = A\b;
-    delta_t = linspace(0,duration,100);
+    delta_t = 0:dt:duration;
 
     Theta = theta_coeffs(1) + theta_coeffs(2)*delta_t + theta_coeffs(3)*delta_t.^2 + theta_coeffs(4)*delta_t.^3;
-    axis = delta_rotvec/delta_theta;
+    if delta_theta < 1e-12
+        axis = [1 0 0];
+    else
+        axis = delta_rotvec/delta_theta;
+    end
     
-    Q = zeros(100,"quaternion");
+    Q = zeros(size(delta_t,2),1,"quaternion");
   
     for i = 1:size(Theta',1)
         delta_qi = quaternion(Theta(i)*axis,'rotvec');
+
         q = delta_qi*initialOrientation;
         Q(i) = q;
     end

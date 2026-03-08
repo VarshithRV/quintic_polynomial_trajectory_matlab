@@ -1,4 +1,4 @@
-function [X,Y,Z,delta_t,x_coeffs,y_coeffs,z_coeffs] = cubicPolynomialTrajectory(initial_conditions,final_conditions,duration)
+function [X,Y,Z,delta_t,x_coeffs,y_coeffs,z_coeffs] = cubicPolynomialTrajectory(initial_conditions,final_conditions,duration,dt)
     %cubicPolynomialTrajectory function returns X,Y,Z delta_t and
     %coefficients
     %   intial_condition and final : initial_position;initial_velocity,final_position,final_velocity, 4x3 matrix
@@ -8,6 +8,7 @@ function [X,Y,Z,delta_t,x_coeffs,y_coeffs,z_coeffs] = cubicPolynomialTrajectory(
         initial_conditions
         final_conditions
         duration
+        dt (1,1) double = 0.1
     end
 
     arguments (Output)
@@ -29,7 +30,7 @@ function [X,Y,Z,delta_t,x_coeffs,y_coeffs,z_coeffs] = cubicPolynomialTrajectory(
     ];
 
     
-    delta_t = linspace(0, duration, 100);
+    delta_t = 0:dt:duration;
 
     Bx = [initial_conditions(:,1); final_conditions(:,1)];
     x_coeffs = A\Bx;
