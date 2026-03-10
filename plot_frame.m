@@ -13,7 +13,8 @@ arguments (Output)
 end
 
 rotation = rotationq.rotmat('frame');
-
+grid on;
+axis equal;
 plot3(position(1),position(2),position(3))
 hold on;
 quiver3(position(1),position(2),position(3),rotation(1,1),rotation(2,1),rotation(3,1),0.1*scale,"r");
